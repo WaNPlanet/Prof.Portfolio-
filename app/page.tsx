@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { HiMenu } from "react-icons/hi";
 
-export default function VeloraPage() {
+export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
