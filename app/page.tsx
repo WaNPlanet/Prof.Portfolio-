@@ -70,7 +70,7 @@ export default function Home() {
           {/* Description + Button */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-base md:text-lg text-gray-700 leading-relaxed md:max-w-xl text-center md:text-left">
-              Owning fewer — but better — clothes is revolutionary. A capsule wardrobe isn&apos;t just about style; it&apos;s about clarity.
+              Owning fewer — but better — clothes is revolutionary. A capsule wardrobe isn't just about style; it's about clarity.
             </p>
             <button className="bg-black text-white px-6 py-2 text-sm md:text-base rounded hover:bg-gray-800 transition">
               Explore Now
