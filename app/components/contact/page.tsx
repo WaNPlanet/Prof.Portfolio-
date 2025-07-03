@@ -22,24 +22,24 @@ export default function ContactPage() {
               <h2 className="text-xl font-semibold">Get in touch</h2>
               <p className="text-gray-600">
                 Have a project in mind or want to discuss potential collaboration? 
-                We&apos;d love to hear from you.
+                I&apos;d love to hear from you.
               </p>
             </div>
 
             <div className="space-y-6">
               <div>
                 <h3 className="text-sm font-medium text-gray-800 mb-2">Email</h3>
-                <p className="text-gray-600">we@district2.studio</p>
+                <p className="text-gray-600">kyereofosuhene@gmail.com</p>
               </div>
               
               <div>
                 <h3 className="text-sm font-medium text-gray-800 mb-2">Location</h3>
-                <p className="text-gray-600">Saigon, Vietnam</p>
+                <p className="text-gray-600">Accra, Ghana</p>
               </div>
               
               <div>
                 <h3 className="text-sm font-medium text-gray-800 mb-2">Phone</h3>
-                <p className="text-gray-600">+84 (0) 28 3636 1354</p>
+                <p className="text-gray-600">+233 (0) 530 729 974</p>
               </div>
               
               <div>
@@ -53,7 +53,7 @@ export default function ContactPage() {
 
           {/* Right: Contact Form */}
           <div className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-lg font-semibold mb-6">Send us a message</h2>
+            <h2 className="text-lg font-semibold mb-6">Send me a message</h2>
             
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

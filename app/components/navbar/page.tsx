@@ -19,7 +19,7 @@ export default function Navbar() {
       {/* Left links for desktop */}
       <div className="hidden md:flex space-x-4">
         <a href="#" className="hover:underline">About</a>
-        <a href="#" className="hover:underline">Blog</a>
+        <a href="./components/blog" className="hover:underline">Blog</a>
       </div>
 
       {/* Logo */}
@@ -33,7 +33,7 @@ export default function Navbar() {
       {/* Right links */}   
       <div className="flex space-x-4">
         <a href="/components/projects"  className="hover:underline" >Projects</a>
-        <a href="#" className="hover:underline">Cart</a>
+        <a href="#" className="hover:underline">Contact</a>
       </div>
 
       {/* Mobile dropdown menu */}
