@@ -1,5 +1,5 @@
 'use client';
-import Navbar from "../navbar/page";
+// import Navbar from "../navbar/page";
 
 export default function ContactPage() {
   return (
@@ -11,7 +11,7 @@ export default function ContactPage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8">
           <h1 className="text-3xl md:text-5xl font-bold">CONTACT</h1>
           <div className="text-base md:text-lg text-gray-700">
-            Let's create something remarkable together
+            Let&apos;s create something remarkable together
           </div>
         </div>
 
@@ -22,7 +22,7 @@ export default function ContactPage() {
               <h2 className="text-xl font-semibold">Get in touch</h2>
               <p className="text-gray-600">
                 Have a project in mind or want to discuss potential collaboration? 
-                We'd love to hear from you.
+                We&apos;d love to hear from you.
               </p>
             </div>
 

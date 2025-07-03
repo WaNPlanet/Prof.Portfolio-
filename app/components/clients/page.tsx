@@ -109,7 +109,7 @@ export default function ClientsPage() {
                       </div>
                       <div className="flex-1 text-center md:text-left">
                         <blockquote className="text-base md:text-lg italic text-gray-600 mb-4">
-                          "{testimonial.quote}"
+                          &apos;{testimonial.quote}&apos;
                         </blockquote>
                         <div className="mt-auto">
                           <p className="font-medium text-gray-800">

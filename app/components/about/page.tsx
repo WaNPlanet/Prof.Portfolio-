@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import Navbar from "../navbar/page";
+
 import Link from "next/link";
 
 export default function AboutPage() {
@@ -31,7 +31,7 @@ export default function AboutPage() {
           {/* Text Content */}
           <div className="w-full lg:w-2/3 space-y-6">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-              Hello, I'm OFOSUHENE KYERE
+              Hello, I&apos;m OFOSUHENE KYERE
             </h2>
             
             <p className="text-gray-600 leading-relaxed">
