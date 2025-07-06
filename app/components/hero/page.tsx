@@ -1,11 +1,11 @@
-// app/components/hero/HeroSection.tsx
 import Image from "next/image";
 import SocialIcons from "../socials/page";
 import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-    <section className="min-h-screen flex-1 px-4 py-4 flex flex-col justify-between w-full max-w-7xl mx-auto">
+    <section className="min-h-screen px-4 py-8 flex flex-col justify-between w-full max-w-7xl mx-auto">
+      
       {/* Title + Socials */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-3">
         <h1 className="text-3xl md:text-5xl font-bold">PORTFOLIO</h1>
@@ -13,9 +13,9 @@ export default function HeroSection() {
       </div>
 
       {/* Description + Button */}
-      <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mt-6">
         <p className="text-base md:text-lg text-gray-700 leading-relaxed md:max-w-xl text-center md:text-left">
-          Owning fewer — but better — clothes is revolutionary. A capsule wardrobe isn&apos;t just about style; it&apos;s about clarity.
+          Simplicity is the soul of efficiency. The best way to predict the future is to invent it.
         </p>
         <Link 
           href="/components/projects" 
@@ -25,14 +25,14 @@ export default function HeroSection() {
         </Link>
       </div>
 
-      {/* Hero Image */}
-      <div className="w-full mt-4">
+      {/* Hero Image - Resized for full screen fit */}
+      <div className="w-full mt-6 h-64 md:h-80 relative">
         <Image
           src="/hero.png"
           alt="Minimal Style"
-          width={1000}
-          height={400}
-          className="rounded-xl w-full object-cover h-[160px] md:h-[270px]"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-xl"
           priority
         />
       </div>

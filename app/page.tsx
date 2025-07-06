@@ -13,7 +13,7 @@ export default function Home() {
         <HeroSection />
         <AboutPage />
        
-<ClientsPage />
+        <ClientsPage />
         
         <ContactPage/>
       </div>

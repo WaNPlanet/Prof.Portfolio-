@@ -1,142 +1,98 @@
-'use client';
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
-const testimonials = [
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+
+
+const DEFAULT_LOGO = '/clients/default-logo.png';
+
+interface Testimonial {
+  name: string;
+  logo?: string;
+  quote: string;
+  role: string;
+}
+
+const testimonials: Testimonial[] = [
   {
     name: "Acme Corp",
-    logo: "/clients/acme-logo.png",
+    logo: "/SOQ.jpg",
     quote: "Their attention to detail transformed our digital presence completely.",
     role: "Chief Marketing Officer",
   },
   {
     name: "Stellar Designs",
-    logo: "/clients/stellar-logo.png",
+    logo: "/kumi.jpeg",
     quote: "Exceptional work that exceeded all our expectations and deadlines.",
-    role: "Product Director",
+    role: "Accountant",
   },
   {
-    name: "Novatech",
-    logo: "/clients/novatech-logo.png",
-    quote: "The perfect blend of creativity and technical expertise we needed.",
-    role: "CEO",
+    name: "Bright Tech",
+    logo: "/h2.jpg",
+    quote: "They delivered ahead of time and nailed every requirement.",
+    role: "Head of Product",
   },
   {
-    name: "Quantum",
-    logo: "/clients/quantum-logo.png",
-    quote: "Delivered exactly what we envisioned, only better.",
+    name: "Neo Solutions",
+    logo: "/h3.jpg",
+    quote: "Reliable, smart, and efficient. Highly recommended!",
     role: "CTO",
   },
-  {
-    name: "Horizon",
-    logo: "/clients/horizon-logo.png",
-    quote: "Consistently impressive work across multiple projects.",
-    role: "Creative Director",
-  },
-  {
-    name: "Aurora",
-    logo: "/clients/aurora-logo.png",
-    quote: "Brought fresh perspective to our digital strategy.",
-    role: "Head of Digital",
-  }
-];
+].map(t => ({
+  ...t,
+  logo: t.logo || DEFAULT_LOGO
+}));
 
 export default function ClientsPage() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Show only one card on mobile, two on desktop
-  const visibleTestimonials = isMobile 
-    ? [testimonials[currentIndex]] 
-    : [testimonials[currentIndex], testimonials[(currentIndex + 1) % testimonials.length]];
-
   return (
-    <div className="min-h-screen bg-[#e4e4e4] font-sans text-black py-12 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8 px-4">
+    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
+      <div className="max-w-7xl mx-auto px-4 py-8 flex flex-col justify-between w-full">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">CLIENTS</h1>
-          <div className="text-base md:text-lg text-gray-700 text-center md:text-left">
+          <p className="text-base md:text-lg text-gray-700">
             Trusted by innovative brands worldwide
-          </div>
+          </p>
         </div>
 
-        {/* Testimonial Cards Container */}
-        <div className={`relative ${isMobile ? 'h-[420px]' : 'h-[380px]'} overflow-hidden px-4`}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              className="absolute w-full h-full"
-              initial={{ opacity: 0, x: isMobile ? 50 : 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: isMobile ? -50 : -100 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-6 h-full`}>
-                {visibleTestimonials.map((testimonial, index) => (
-                  <motion.div
-                    key={`${testimonial.name}-${index}`}
-                    className="bg-white rounded-xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all h-full flex flex-col"
-                    whileHover={{ y: isMobile ? 0 : -5 }} // Disable hover effect on mobile
-                  >
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-start flex-1">
-                      <div className="w-20 h-20 md:w-24 md:h-24 relative bg-gray-50 rounded-lg flex items-center justify-center p-2 md:p-3 mx-auto md:mx-0">
-                        <Image
-                          src={testimonial.logo}
-                          alt={testimonial.name}
-                          width={isMobile ? 80 : 96}
-                          height={isMobile ? 80 : 96}
-                          className="object-contain"
-                        />
-                      </div>
-                      <div className="flex-1 text-center md:text-left">
-                        <blockquote className="text-base md:text-lg italic text-gray-600 mb-4">
-                          &apos;{testimonial.quote}&apos;
-                        </blockquote>
-                        <div className="mt-auto">
-                          <p className="font-medium text-gray-800">
-                            {testimonial.name}
-                          </p>
-                          <p className="text-sm text-gray-500">{testimonial.role}</p>
-                        </div>
+        {/* 2x2 Grid */}
+        <div className="flex flex-col gap-12">
+          {[0, 2].map((start, rowIndex) => (
+            <div key={rowIndex} className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {testimonials.slice(start, start + 2).map((t, i) => (
+                <motion.div
+                  key={`${t.name}-${i + start}`}
+                  className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col justify-between h-full"
+                  whileHover={{ y: -5 }}
+                >
+                  <div className="flex items-start gap-5">
+                    {/* Enlarged logo */}
+                    <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-xl flex items-center justify-center p-2">
+                     <Image
+  src={t.logo || DEFAULT_LOGO} 
+  alt={`${t.name} logo`}
+  width={96}
+  height={96}
+  className="object-contain w-full h-full"
+  onError={(e) => {
+    (e.target as HTMLImageElement).src = DEFAULT_LOGO;
+  }}
+/>
+</div>
+
+                    {/* Text */}
+                    <div className="flex-1">
+                      <p className="text-base italic text-gray-700 mb-3 line-clamp-4">
+                        &ldquo;{t.quote}&rdquo;
+                      </p>
+                      <div className="border-t pt-2 border-gray-200">
+                        <p className="text-base font-semibold text-gray-800">{t.name}</p>
+                        <p className="text-sm text-gray-500">{t.role}</p>
                       </div>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Pagination Dots */}
-        <div className="mt-8 flex justify-center gap-2 px-4">
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                currentIndex === index ? 'bg-black' : 'bg-gray-300'
-              }`}
-              aria-label={`Go to testimonial ${index + 1}`}
-            />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           ))}
         </div>
       </div>

@@ -34,7 +34,7 @@ export default function BlogPostPage() {
       
       <div class="my-8">
         <Image 
-          src="/blog/dashboard-example.jpg" 
+          src="/h1.jpg" 
           alt="Dashboard redesign" 
           width={1200} 
           height={600} 
@@ -50,7 +50,6 @@ export default function BlogPostPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
       <Navbar />
-      
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         {/* Back Button */}
        <Link 
@@ -116,7 +115,7 @@ export default function BlogPostPage() {
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full overflow-hidden">
               <Image
-                src="/team/author.jpg"
+                src="/h2.jpg"
                 alt="Author name"
                 width={64}
                 height={64}
@@ -139,7 +138,7 @@ export default function BlogPostPage() {
               <div key={item} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
                 <div className="relative h-48 w-full">
                   <Image
-                    src={`/blog/related-${item}.jpg`}
+                    src={`/blog/blog${item}.jpg`}
                     alt={`Related post ${item}`}
                     fill
                     className="object-cover"

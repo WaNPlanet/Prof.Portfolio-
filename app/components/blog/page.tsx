@@ -28,7 +28,7 @@ const BlogPage = () => {
       category: "Design",
       date: "May 28, 2024",
       readTime: "5 min read",
-      image: "/blog/psychology-space.jpg"
+      image: "/blog/blog1.jpg"
     },
     // ... (other posts from previous example)
   ];

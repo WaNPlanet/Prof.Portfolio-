@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
+    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id='#about'>
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         {/* Header Section - Matches Projects page */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8">
@@ -20,7 +20,7 @@ export default function AboutPage() {
           {/* Profile Image */}
           <div className="w-full lg:w-1/3 relative aspect-square rounded-xl overflow-hidden shadow-md">
             <Image
-              src="/about-profile.jpg" // Replace with your image
+              src="/me.jpg" 
               alt="Profile"
               fill
               className="object-cover"

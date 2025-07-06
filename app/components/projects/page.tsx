@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Navbar from "../navbar/page";
-// import Link from "next/link";
+import Link from "next/link";
 
 interface Project {
   id: number;
@@ -10,6 +10,7 @@ interface Project {
   description: string;
   image: string;
   hoverImage: string;
+  link: string;
 }
 
 export default function ProjectsPage() {
@@ -21,21 +22,24 @@ export default function ProjectsPage() {
       title: 'E-commerce Platform',
       description: 'A modern online shopping experience with seamless checkout and product discovery',
       image: '/projects/art.png',
-      hoverImage: '/projects/ecommerce-hover.jpg'
+      hoverImage: '/projects/ecommerce-hover.png',
+      link: 'https://wanplanet.github.io/art-shop/'
     },
     {
       id: 2,
       title: 'Portfolio Website',
       description: 'Elegant showcase for creative professionals and agencies',
       image: '/projects/energy.png',
-      hoverImage: '/projects/portfolio-hover.jpg'
+      hoverImage: '/projects/portfolio-hover.jpg',
+      link: 'https://energy-six.vercel.app/'
     },
     {
       id: 3,
       title: 'Mobile App',
       description: 'Cross-platform application for iOS and Android with native performance',
       image: '/projects/planetSpeaks.png',
-      hoverImage: '/projects/mobile-hover.jpg'
+      hoverImage: '/projects/mobile-hover.png',
+      link: 'https://main-site-murex-psi.vercel.app/'
     }
   ];
 
@@ -55,8 +59,11 @@ export default function ProjectsPage() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
-            <div 
+            <Link 
               key={project.id}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col"
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
@@ -82,24 +89,13 @@ export default function ProjectsPage() {
                   {project.title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-3 flex-1">{project.description}</p>
-                <button className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors self-start cursor-pointer">
+                <span className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors self-start cursor-pointer">
                   View details →
-                </button>
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
-
-        {/* CTA Section */}
-        {/* <div className="mt-8 flex justify-center">
-          <Link href="/components/contact">
-           <button className="bg-black text-white px-6 py-2 cursor-pointer
-            text-sm md:text-base rounded hover:bg-gray-800 transition">
-            Get in Touch
-          </button>
-          </Link>
-         
-        </div> */}
       </div>
     </div>
   );
