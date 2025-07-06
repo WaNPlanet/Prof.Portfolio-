@@ -1,4 +1,4 @@
-// app/components/social/SocialIcons.tsx
+
 import { FaLinkedinIn, FaYoutube , FaGithub } from "react-icons/fa";
 
 export default function SocialIcons() {
