@@ -1,18 +1,17 @@
+'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
 
+// Import only motion.div dynamically (client-side only)
+const MotionDiv = dynamic(() =>
+  import('framer-motion').then(mod => mod.motion.div),
+  { ssr: false }
+);
 
 const DEFAULT_LOGO = '/clients/default-logo.png';
 
-interface Testimonial {
-  name: string;
-  logo?: string;
-  quote: string;
-  role: string;
-}
-
-const testimonials: Testimonial[] = [
+const testimonials = [
   {
     name: "Acme Corp",
     logo: "/SOQ.jpg",
@@ -54,32 +53,27 @@ export default function ClientsPage() {
           </p>
         </div>
 
-        {/* 2x2 Grid */}
+        {/* 2x2 Testimonial Grid */}
         <div className="flex flex-col gap-12">
           {[0, 2].map((start, rowIndex) => (
             <div key={rowIndex} className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {testimonials.slice(start, start + 2).map((t, i) => (
-                <motion.div
+                <MotionDiv
                   key={`${t.name}-${i + start}`}
                   className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all flex flex-col justify-between h-full"
                   whileHover={{ y: -5 }}
                 >
                   <div className="flex items-start gap-5">
-                    {/* Enlarged logo */}
                     <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-xl flex items-center justify-center p-2">
-                     <Image
-  src={t.logo || DEFAULT_LOGO} 
-  alt={`${t.name} logo`}
-  width={96}
-  height={96}
-  className="object-contain w-full h-full"
-  onError={(e) => {
-    (e.target as HTMLImageElement).src = DEFAULT_LOGO;
-  }}
-/>
-</div>
-
-                    {/* Text */}
+                      <Image
+                        src={t.logo!}
+                        alt={`${t.name} logo`}
+                        width={96}
+                        height={96}
+                        className="object-contain w-full h-full"
+                        unoptimized
+                      />
+                    </div>
                     <div className="flex-1">
                       <p className="text-base italic text-gray-700 mb-3 line-clamp-4">
                         &ldquo;{t.quote}&rdquo;
@@ -90,7 +84,7 @@ export default function ClientsPage() {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </MotionDiv>
               ))}
             </div>
           ))}
