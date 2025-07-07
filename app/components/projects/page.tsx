@@ -27,7 +27,7 @@ export default function ProjectsPage() {
     },
     {
       id: 2,
-      title: 'Portfolio Website',
+      title: 'Energy Website',
       description: 'Elegant showcase for creative professionals and agencies',
       image: '/projects/energy.png',
       hoverImage: '/projects/portfolio-hover.png',
@@ -40,6 +40,15 @@ export default function ProjectsPage() {
       image: '/projects/planetSpeaks.png',
       hoverImage: '/projects/mobile-hover.png',
       link: 'https://main-site-murex-psi.vercel.app/'
+    },
+
+     {
+      id: 4,
+      title: 'Thy Homes',
+      description: 'Cross-platform application for iOS and Android for real estate',
+      image: '/projects/homes.webp',
+      hoverImage: '/projects/homes-hover.webp',
+      link: 'https://wanplanet.github.io/ThyHomes/'
     }
   ];
 
