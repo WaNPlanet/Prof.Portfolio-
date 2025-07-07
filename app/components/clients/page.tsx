@@ -15,7 +15,7 @@ const testimonials = [
   {
     name: "Acme Corp",
     logo: "/SOQ.jpg",
-    quote: "Their attention to detail transformed our digital presence completely.",
+    quote: "His attention to detail transformed our digital presence completely.",
     role: "Chief Marketing Officer",
   },
   {
@@ -27,7 +27,7 @@ const testimonials = [
   {
     name: "Bright Tech",
     logo: "/h2.jpg",
-    quote: "They delivered ahead of time and nailed every requirement.",
+    quote: "His delivered ahead of time and nailed every requirement.",
     role: "Head of Product",
   },
   {
