@@ -20,7 +20,7 @@ export default function AboutPage() {
           {/* Profile Image */}
           <div className="w-full lg:w-1/3 relative aspect-square rounded-xl overflow-hidden shadow-md">
             <Image
-              src="/me.jpg" 
+              src="/Me.jpg" 
               alt="Profile"
               fill
               className="object-cover"
