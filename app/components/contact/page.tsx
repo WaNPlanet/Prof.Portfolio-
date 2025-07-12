@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
-import { FaLinkedinIn, FaYoutube , FaGithub } from "react-icons/fa";
+import { FaLinkedinIn, FaYoutube, FaGithub } from "react-icons/fa";
+import emailjs from '@emailjs/browser';
 
 interface FormData {
   name: string;
@@ -11,6 +12,7 @@ interface FormData {
   subject: string;
   company: string;
 }
+
 export default function ContactPage() {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -23,54 +25,56 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
   const [serverMessage, setServerMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.email.includes('@')) {
-      setSubmitStatus('error');
-      setServerMessage('Please enter a valid email address');
-      return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  // Client-side validation
+  if (!formData.email.includes('@')) {
+    setSubmitStatus('error');
+    setServerMessage('Please enter a valid email address');
+    return;
+  }
+
+  if (formData.message.trim().length < 10) {
+    setSubmitStatus('error');
+    setServerMessage('Message should be at least 10 characters');
+    return;
+  }
+
+  setSubmitting(true);
+  setSubmitStatus(null);
+  setServerMessage('');
+
+  try {
+    const response = await fetch('/api/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send message');
     }
 
-    if (formData.message.trim().length < 10) {
-      setSubmitStatus('error');
-      setServerMessage('Message should be at least 10 characters');
-      return;
-    }
+    setServerMessage(data.message);
+    setSubmitStatus('success');
+    setFormData({ name: '', email: '', message: '', subject: '', company: '' });
+  } catch (error: any) {
+    setSubmitStatus('error');
+    setServerMessage(error.message || 'Failed to send message. Please try again later.');
+    console.error('Submission error:', error);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
-    setSubmitting(true);
-    setSubmitStatus(null);
-    setServerMessage('');
-
-    try {
-      const response = await fetch('http://localhost:5156/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || `HTTP error! status: ${response.status}`);
-      }
-
-      const { message } = await response.json();
-      setServerMessage(message || 'Message sent successfully!');
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '', subject: '', company: '' });
-    } catch (error) {
-      console.error('Submission error:', error);
-      setSubmitStatus('error');
-      setServerMessage(error instanceof Error ? error.message : 'Failed to send message');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id='contact'>
+    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id='#contact'>
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8">
@@ -243,7 +247,6 @@ export default function ContactPage() {
                 )}
               </button>
 
-              {/* Status messages moved inside the return statement */}
               {submitStatus === 'success' && (
                 <div className="p-4 bg-green-50 text-green-800 rounded-lg">
                   <p className="font-medium">Thank you for your message!</p>
