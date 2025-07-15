@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
 import { FaLinkedinIn, FaYoutube, FaGithub } from "react-icons/fa";
-import emailjs from '@emailjs/browser';
 
+// Type definitions
 interface FormData {
   name: string;
   email: string;
@@ -13,7 +13,20 @@ interface FormData {
   company: string;
 }
 
+interface ApiError {
+  message: string;
+  error?: string;
+}
+
+interface ApiResponse {
+  message: string;
+  error?: string;
+}
+
+type SubmitStatus = 'success' | 'error' | null;
+
 export default function ContactPage() {
+  // State with explicit types
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -21,60 +34,80 @@ export default function ContactPage() {
     subject: '',
     company: ''
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
-  const [serverMessage, setServerMessage] = useState('');
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>(null);
+  const [serverMessage, setServerMessage] = useState<string>('');
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  // Form submission handler with proper typing
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
 
-  // Client-side validation
-  if (!formData.email.includes('@')) {
-    setSubmitStatus('error');
-    setServerMessage('Please enter a valid email address');
-    return;
-  }
-
-  if (formData.message.trim().length < 10) {
-    setSubmitStatus('error');
-    setServerMessage('Message should be at least 10 characters');
-    return;
-  }
-
-  setSubmitting(true);
-  setSubmitStatus(null);
-  setServerMessage('');
-
-  try {
-    const response = await fetch('/api/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to send message');
+    // Client-side validation
+    if (!formData.email.includes('@')) {
+      setSubmitStatus('error');
+      setServerMessage('Please enter a valid email address');
+      return;
     }
 
-    setServerMessage(data.message);
-    setSubmitStatus('success');
-    setFormData({ name: '', email: '', message: '', subject: '', company: '' });
-  } catch (error: any) {
-    setSubmitStatus('error');
-    setServerMessage(error.message || 'Failed to send message. Please try again later.');
-    console.error('Submission error:', error);
-  } finally {
-    setSubmitting(false);
-  }
-};
+    if (formData.message.trim().length < 10) {
+      setSubmitStatus('error');
+      setServerMessage('Message should be at least 10 characters');
+      return;
+    }
 
+    setSubmitting(true);
+    setSubmitStatus(null);
+    setServerMessage('');
+
+    try {
+      const response: Response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data: ApiResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setServerMessage(data.message);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '', subject: '', company: '' });
+    } catch (error: unknown) {
+      setSubmitStatus('error');
+      if (isApiError(error)) {
+        setServerMessage(error.message || error.error || 'Failed to send message. Please try again later.');
+      } else {
+        setServerMessage('Failed to send message. Please try again later.');
+      }
+      console.error('Submission error:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Type guard for error handling
+  const isApiError = (error: unknown): error is ApiError => {
+    return typeof error === 'object' && error !== null && 'message' in error;
+  };
+
+  // Input change handler with proper typing
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ): void => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id='#contact'>
+    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id="contact">
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8">
@@ -135,13 +168,31 @@ const handleSubmit = async (e: React.FormEvent) => {
                   {/* Social icon placeholder */}
                 </div>
                 <div className="flex gap-4 text-gray-600 text-sm md:text-base">
-                  <a href="https://www.youtube.com/@Planet.speaks" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-black">
+                  <a 
+                    href="https://www.youtube.com/@Planet.speaks" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label="YouTube" 
+                    className="hover:text-black"
+                  >
                     <FaYoutube className="h-5 w-5" />
                   </a>
-                  <a href="https://www.linkedin.com/in/ofosuhene-kyere-267076246" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-black">
+                  <a 
+                    href="https://www.linkedin.com/in/ofosuhene-kyere-267076246" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label="LinkedIn" 
+                    className="hover:text-black"
+                  >
                     <FaLinkedinIn className="h-5 w-5" />
                   </a>
-                  <a href="https://github.com/WaNPlanet" target="_blank" rel="noopener noreferrer" aria-label="Github" className="hover:text-black">
+                  <a 
+                    href="https://github.com/WaNPlanet" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label="Github" 
+                    className="hover:text-black"
+                  >
                     <FaGithub className="h-5 w-5" />
                   </a>
                 </div>
@@ -167,21 +218,25 @@ const handleSubmit = async (e: React.FormEvent) => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1">
-                  <label className="text-sm text-gray-600">Name</label>
+                  <label htmlFor="name" className="text-sm text-gray-600">Name</label>
                   <input 
+                    id="name"
+                    name="name"
                     type="text" 
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full border-b border-gray-300 py-2 focus:border-black outline-none bg-transparent"
                     required
                   />
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-sm text-gray-600">Subject</label>
+                  <label htmlFor="subject" className="text-sm text-gray-600">Subject</label>
                   <select
+                    id="subject"
+                    name="subject"
                     value={formData.subject}
-                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full border-b border-gray-300 py-2 focus:border-black outline-none bg-transparent"
                     required
                   >
@@ -195,21 +250,25 @@ const handleSubmit = async (e: React.FormEvent) => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-1">
-                  <label className="text-sm text-gray-600">Company</label>
+                  <label htmlFor="company" className="text-sm text-gray-600">Company</label>
                   <input 
+                    id="company"
+                    name="company"
                     type="text" 
                     value={formData.company}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full border-b border-gray-300 py-2 focus:border-black outline-none bg-transparent"
                   />
                 </div>
                 
                 <div className="space-y-1">
-                  <label className="text-sm text-gray-600">Email</label>
+                  <label htmlFor="email" className="text-sm text-gray-600">Email</label>
                   <input 
+                    id="email"
+                    name="email"
                     type="email" 
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={handleInputChange}
                     className="w-full border-b border-gray-300 py-2 focus:border-black outline-none bg-transparent"
                     required
                   />
@@ -217,11 +276,13 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
               
               <div className="space-y-1">
-                <label className="text-sm text-gray-600">Message</label>
+                <label htmlFor="message" className="text-sm text-gray-600">Message</label>
                 <textarea 
+                  id="message"
+                  name="message"
                   rows={4}
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={handleInputChange}
                   className="w-full border-b border-gray-300 py-2 focus:border-black outline-none bg-transparent resize-none"
                   required
                 />

@@ -1,21 +1,33 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
+interface FormData {
+  name?: string;
+  email: string;
+  message: string;
+  subject?: string;
+  company?: string;
+}
+
+interface ErrorResponse {
+  error: string;
+}
+
 export async function POST(request: Request) {
   try {
     // Get form data from request
-    const formData = await request.json();
+    const formData: FormData = await request.json();
     
     // Validate required fields
     if (!formData.email || !formData.email.includes('@')) {
-      return NextResponse.json(
+      return NextResponse.json<ErrorResponse>(
         { error: 'Please enter a valid email address' },
         { status: 400 }
       );
     }
 
     if (!formData.message || formData.message.trim().length < 10) {
-      return NextResponse.json(
+      return NextResponse.json<ErrorResponse>(
         { error: 'Message must be at least 10 characters' },
         { status: 400 }
       );
@@ -63,7 +75,7 @@ export async function POST(request: Request) {
     // Send email
     await transporter.sendMail({
       from: `"Portfolio Contact Form" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // Sending to yourself
+      to: process.env.EMAIL_USER,
       subject: formData.subject || 'New Contact Form Submission',
       text: emailText,
       html: emailHtml,
@@ -74,10 +86,16 @@ export async function POST(request: Request) {
       { status: 200 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Email sending error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to send message. Please try again later.' },
+    
+    let errorMessage = 'Failed to send message. Please try again later.';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    return NextResponse.json<ErrorResponse>(
+      { error: errorMessage },
       { status: 500 }
     );
   }

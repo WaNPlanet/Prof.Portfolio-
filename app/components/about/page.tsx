@@ -49,21 +49,21 @@ export default function AboutPage() {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">Skills & Expertise</h3>
-              <div className="flex flex-wrap gap-3">
-                {['UI/UX Design', 'Frontend Development', 'Responsive Design', 
-                  'User Research', 'Prototyping', 'Design Systems',
-                  'Arduino Programming','Backend Development','Content Creation',
-                ].map((skill, index) => (
-                  <span 
-                    key={skill} 
-                    className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm shadow-sm"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
+  <h3 className="text-xl font-semibold text-gray-800">Skills & Expertise</h3>
+  <div className="flex flex-wrap gap-3">
+    {['UI/UX Design', 'Frontend Development', 'Responsive Design', 
+      'User Research', 'Prototyping', 'Design Systems',
+      'Arduino Programming','Backend Development','Content Creation',
+    ].map((skill) => (
+      <span 
+        key={skill} 
+        className="px-3 py-1 bg-white border border-gray-200 rounded-full text-sm shadow-sm"
+      >
+        {skill}
+      </span>
+    ))}
+  </div>
+</div>
           </div>
         </div>
 

@@ -5,33 +5,21 @@ import { motion } from 'framer-motion';
 import { FiArrowRight, FiClock, FiCalendar } from 'react-icons/fi';
 import { useState } from 'react';
 import Link from "next/link";
+import { blogPosts } from '../../lib/blogData';
 
 const BlogPage = () => {
   const categories = ['All', 'Design', 'Development', 'Case Studies'];
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const featuredPost = {
-    id: 0,
-    title: "Redefining Digital Experiences Through Thoughtful Design",
-    excerpt: "How we're pushing boundaries in user experience by combining minimalist aesthetics with cutting-edge functionality.",
-    category: "Design",
-    date: "June 2, 2024",
-    readTime: "6 min read",
-    image: "/blog/featured-post.jpg"
+  // Get featured post (first post)
+  const featuredPost = blogPosts[0] || {
+    title: "Featured Post",
+    excerpt: "Featured post excerpt",
+    date: new Date().toLocaleDateString(),
+    readTime: "5 min read",
+    image: "/default-blog.jpg",
+    slug: "featured-post"
   };
-
-  const blogPosts = [
-    {
-      id: 1,
-      title: "The Psychology of Space in Digital Interfaces",
-      excerpt: "Exploring how negative space influences user perception and engagement.",
-      category: "Design",
-      date: "May 28, 2024",
-      readTime: "5 min read",
-      image: "/blog/blog1.jpg"
-    },
-    // ... (other posts from previous example)
-  ];
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
@@ -73,7 +61,7 @@ const BlogPage = () => {
                   Featured
                 </span>
                 <span className="text-sm text-gray-500 uppercase tracking-wider">
-                  {featuredPost.category}
+                  {categories[1]} {/* Using first category */}
                 </span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">{featuredPost.title}</h2>
@@ -81,20 +69,25 @@ const BlogPage = () => {
               <div className="flex flex-wrap gap-6 items-center">
                 <div className="flex items-center gap-2 text-gray-500">
                   <FiCalendar className="text-sm" />
-                  <span className="text-sm">{featuredPost.date}</span>
+                  <span className="text-sm">
+                    {new Date(featuredPost.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-gray-500">
                   <FiClock className="text-sm" />
-                  <span className="text-sm">{featuredPost.readTime}</span>
+                  <span className="text-sm">5 min read</span>
                 </div>
               </div>
-              <Link href="./blogread">
-              <button className="mt-8 flex items-center gap-2 text-black font-medium group cursor-pointer">
-                Read full article
-                <FiArrowRight className="transition-transform group-hover:translate-x-1" />
-              </button>
+              <Link href={`/blog/${featuredPost.slug}`}>
+                <button className="mt-8 flex items-center gap-2 text-black font-medium group cursor-pointer">
+                  Read full article
+                  <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+                </button>
               </Link>
-              
             </div>
           </div>
         </motion.div>
@@ -121,7 +114,7 @@ const BlogPage = () => {
 
           {/* Posts Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map(post => (
+            {blogPosts.slice(1).map(post => (
               <motion.div 
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -130,29 +123,37 @@ const BlogPage = () => {
                 whileHover={{ y: -8 }}
                 className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all"
               >
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full mb-4">
-                    {post.category}
-                  </span>
-                  <h3 className="text-xl font-bold mb-3">{post.title}</h3>
-                  <p className="text-gray-600 mb-5">{post.excerpt}</p>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500">{post.date}</span>
-                    <button className="flex items-center gap-1 text-black font-medium group cursor-pointer">
-                      Read
-                      <FiArrowRight className="transition-transform group-hover:translate-x-1 text-sm" />
-                    </button>
+                <Link href={`/blog/${post.slug}`}>
+                  <div className="relative h-48 w-full">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
                   </div>
-                </div>
+                  <div className="p-6">
+                    <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full mb-4">
+                      {categories[1]} {/* Using first category */}
+                    </span>
+                    <h3 className="text-xl font-bold mb-3">{post.title}</h3>
+                    <p className="text-gray-600 mb-5">{post.excerpt}</p>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">
+                        {new Date(post.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </span>
+                      <div className="flex items-center gap-1 text-black font-medium group cursor-pointer">
+                        Read
+                        <FiArrowRight className="transition-transform group-hover:translate-x-1 text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -173,7 +174,7 @@ const BlogPage = () => {
             <input 
               type="email" 
               placeholder="Your email address" 
-              className="flex-1 px-4 py-3 rounded-lgtext-white border border-white bg-transparent rounded-lg"
+              className="flex-1 px-4 py-3  text-white border border-white bg-transparent rounded-lg"
             />
             <button className="px-6 py-3 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition-all">
               Subscribe

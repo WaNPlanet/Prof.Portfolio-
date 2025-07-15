@@ -1,8 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from "../navbar/page";
 import Link from "next/link";
+import Modal from 'react-modal';
+
+if (typeof window !== 'undefined') {
+  Modal.setAppElement('#__next');
+}
 
 interface Project {
   id: number;
@@ -12,11 +17,23 @@ interface Project {
   hoverImage: string;
   link: string;
   category: 'frontend' | 'cad' | 'arduino' | 'fullstack';
+  extraImages?: string[];
 }
 
 export default function ProjectsPage() {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [activeMedia, setActiveMedia] = useState<string | null>(null);
+  const [modalReady, setModalReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      Modal.setAppElement('#__next');
+      setModalReady(true);
+    }
+  }, []);
 
   const projects: Project[] = [
     {
@@ -61,6 +78,7 @@ export default function ProjectsPage() {
       description: 'Precision engineering design for mechanical components',
       image: '/projects/Arduino.jpg',
       hoverImage: '/projects/Arduino-Hover.mp4',
+      extraImages: ['/projects/Arduino.jpg', '/projects/Arduino-Detail.jpg'],
       link: '#',
       category: 'arduino'
     },
@@ -70,33 +88,17 @@ export default function ProjectsPage() {
       description: 'Manufacturing process simulation and optimization',
       image: '/projects/3d-Printer.jpg',
       hoverImage: '/projects/3d-Printer-Hover.jpg',
+      extraImages: ['/projects/3d-Printer.jpg', '/projects/3d-Printer-View2.jpg'],
       link: '#',
       category: 'cad'
     },
-        {
+    {
       id: 7,
       title: 'CAM Simulation',
       description: 'Manufacturing process simulation and optimization',
       image: '/projects/Sofa.png',
       hoverImage: '/projects/Sofa-Hover.png',
-      link: '#',
-      category: 'cad'
-    },
-        {
-      id: 8,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
-      image: '/projects/cam1.jpg',
-      hoverImage: '/projects/cam1-hover.jpg',
-      link: '#',
-      category: 'cad'
-    },
-        {
-      id: 9,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
-      image: '/projects/cam1.jpg',
-      hoverImage: '/projects/cam1-hover.jpg',
+      extraImages: ['/projects/Sofa.png', '/projects/Sofa-Detail.png'],
       link: '#',
       category: 'cad'
     }
@@ -110,23 +112,94 @@ export default function ProjectsPage() {
     { id: 'arduino', name: 'Arduino' }
   ];
 
-  const filteredProjects = activeCategory === 'all' 
-    ? projects 
+  const filteredProjects = activeCategory === 'all'
+    ? projects
     : projects.filter(project => project.category === activeCategory);
+
+  const openModal = (project: Project) => {
+    setSelectedProject(project);
+    setActiveMedia(project.hoverImage);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedProject(null);
+    setActiveMedia(null);
+  };
+
+  const handleProjectClick = (project: Project) => {
+    if (project.category === 'frontend' || project.category === 'fullstack') return;
+    openModal(project);
+  };
+
+  const renderProjectLink = (project: Project) => {
+    if (project.category === 'frontend' || project.category === 'fullstack') {
+      return (
+        <Link
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col h-full"
+          onMouseEnter={() => setHoveredProject(project.id)}
+          onMouseLeave={() => setHoveredProject(null)}
+        >
+          {renderProjectContent(project)}
+        </Link>
+      );
+    } else {
+      return (
+        <div
+          onClick={() => handleProjectClick(project)}
+          className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col h-full cursor-pointer"
+          onMouseEnter={() => setHoveredProject(project.id)}
+          onMouseLeave={() => setHoveredProject(null)}
+        >
+          {renderProjectContent(project)}
+        </div>
+      );
+    }
+  };
+
+  const renderProjectContent = (project: Project) => (
+    <>
+      <div className="relative w-full h-48 md:h-64 aspect-video">
+        <Image
+          src={hoveredProject === project.id ? project.hoverImage : project.image}
+          alt={project.title}
+          fill
+          className="object-contain transition-all duration-300 bg-gray-100 p-2"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+      </div>
+
+      <div className="p-5 flex-1 flex flex-col">
+        <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-indigo-600 transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-gray-600 text-sm mb-3 flex-1">{project.description}</p>
+        <div className="flex justify-between items-center">
+          <span className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors self-start">
+            {project.category === 'frontend' || project.category === 'fullstack' ? 'View details →' : 'View project →'}
+          </span>
+          <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
+            {project.category}
+          </span>
+        </div>
+      </div>
+    </>
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
-        {/* Header Section */}
+      <div id="__next" className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-6">
           <h1 className="text-3xl md:text-5xl font-bold">PROJECTS</h1>
-          <div className="text-base md:text-lg text-gray-700">
-            Explore our innovative solutions
-          </div>
+          <div className="text-base md:text-lg text-gray-700">Explore our innovative solutions</div>
         </div>
-        
-        {/* Category Filter */}
+
         <div className="mb-8 align-middle">
           <div className="flex justify-center gap-2 md:gap-4">
             {categories.map((category) => (
@@ -144,51 +217,11 @@ export default function ProjectsPage() {
             ))}
           </div>
         </div>
-        
-        {/* Projects Grid */}
+
         {filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <Link 
-                key={project.id}
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col"
-                onMouseEnter={() => setHoveredProject(project.id)}
-                onMouseLeave={() => setHoveredProject(null)}
-              >
-                {/* Image Container */}
-                <div className="relative w-full h-48 md:h-64 aspect-video">
-                  <Image
-                    src={hoveredProject === project.id ? project.hoverImage : project.image}
-                    alt={project.title}
-                    fill
-                    className="object-contain transition-all duration-300 bg-gray-100 p-2"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    style={{
-                      objectPosition: 'center center'
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
-                </div>
-                
-                {/* Content */}
-                <div className="p-5 flex-1 flex flex-col">
-                  <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-indigo-600 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-3 flex-1">{project.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors self-start cursor-pointer">
-                      View details →
-                    </span>
-                    <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-              </Link>
+              <div key={project.id}>{renderProjectLink(project)}</div>
             ))}
           </div>
         ) : (
@@ -197,6 +230,110 @@ export default function ProjectsPage() {
           </div>
         )}
       </div>
+
+      {modalReady && selectedProject && (
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Project Modal"
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <div className="w-screen h-screen p-4 flex flex-col bg-white overflow-hidden">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">{selectedProject.title}</h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="flex-grow overflow-hidden">
+              {activeMedia?.endsWith('.mp4') ? (
+                <video
+                  src={activeMedia}
+                  controls
+                  autoPlay
+                  loop
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <Image
+                  src={activeMedia || ''}
+                  alt={selectedProject.title}
+                  width={1200}
+                  height={800}
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+
+            {selectedProject.extraImages && (
+              <div className="flex gap-4 mt-4 overflow-x-auto">
+                {selectedProject.extraImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="w-24 h-24 cursor-pointer border border-gray-300 hover:border-indigo-600 rounded overflow-hidden"
+                    onClick={() => setActiveMedia(img)}
+                  >
+                    <Image
+                      src={img}
+                      alt={`Extra view ${idx + 1}`}
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="pt-4">
+              <p className="text-gray-700 mb-4">{selectedProject.description}</p>
+              <div className="flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      <style jsx global>{`
+        .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: white;
+          padding: 0;
+          border: none;
+          outline: none;
+          overflow: hidden;
+          width: 100vw;
+          height: 100vh;
+          z-index: 1001;
+        }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.75);
+          z-index: 1000;
+        }
+      `}</style>
     </div>
   );
 }
