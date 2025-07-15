@@ -107,7 +107,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id="contact">
+    <div className="min-h-screen bg-[#f5f5f5] font-sans text-black" id="#contact">
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-8">

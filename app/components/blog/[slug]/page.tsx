@@ -2,8 +2,14 @@
 import { getPostBySlug } from '@/app/lib/blogData';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
 // This is automatically a Server Component
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(params.slug);
   
   if (!post) {
@@ -24,7 +30,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 }
 
 // Metadata generation (must be in Server Component)
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: PageProps) {
   const post = getPostBySlug(params.slug);
   
   if (!post) {
@@ -43,7 +49,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 // Generate static paths at build time
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<Array<PageProps['params']>> {
   const { blogPosts } = await import('@/app/lib/blogData');
   return blogPosts.map(post => ({
     slug: post.slug
