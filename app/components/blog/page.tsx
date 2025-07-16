@@ -16,72 +16,43 @@ const BlogPage = () => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  
-  // Basic validation
-  if (!email || !email.includes('@')) {
-    setStatus('error');
-    setMessage('Please enter a valid email address');
-    return;
-  }
-
-  setStatus('loading');
-
-  try {
-    const res = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || 'Subscription failed');
+    e.preventDefault();
+    
+    // Basic validation
+    if (!email || !email.includes('@')) {
+      setStatus('error');
+      setMessage('Please enter a valid email address');
+      return;
     }
 
-    setStatus('success');
-    setMessage('Thank you for subscribing!');
-    setEmail('');
-    
-    // Reset message after 5 seconds
-    setTimeout(() => setMessage(''), 5000);
-  } catch (err) {
-    setStatus('error');
-    setMessage(err instanceof Error ? err.message : 'Failed to subscribe');
-  }
-};
+    setStatus('loading');
 
-const handleSubscribe = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
-  try {
-    const response = await fetch('/api/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
+      const data = await res.json();
 
-    const data = await response.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Subscription failed');
+      }
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Subscription failed');
+      setStatus('success');
+      setMessage('Thank you for subscribing!');
+      setEmail('');
+      
+      // Reset message after 5 seconds
+      setTimeout(() => setMessage(''), 5000);
+    } catch (err) {
+      setStatus('error');
+      setMessage(err instanceof Error ? err.message : 'Failed to subscribe');
     }
-
-    setStatus('success');
-    setMessage(data.message);
-    setEmail('');
-    
-  } catch (error) {
-    setStatus('error');
-    setMessage(error instanceof Error ? error.message : 'Subscription failed');
-  }
-};
+  };
 
   const featuredPost = blogPosts[0] || {
     title: "Featured Post",

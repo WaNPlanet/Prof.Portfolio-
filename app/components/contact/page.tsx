@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { FiMail, FiMapPin, FiPhone } from 'react-icons/fi';
 import { FaLinkedinIn, FaYoutube, FaGithub } from "react-icons/fa";
 
@@ -14,11 +14,6 @@ interface FormData {
 }
 
 interface ApiError {
-  message: string;
-  error?: string;
-}
-
-interface ApiResponse {
   message: string;
   error?: string;
 }
@@ -39,40 +34,35 @@ export default function ContactPage() {
   const [serverMessage, setServerMessage] = useState<string>('');
 
   // Form submission handler with proper typing
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setSubmitting(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
 
-  try {
-    const response = await fetch('/api/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to send message');
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setSubmitStatus('success');
+      setServerMessage(data.message);
+      setFormData({ name: '', email: '', message: '', subject: '', company: '' });
+      
+    } catch (error) {
+      setSubmitStatus('error');
+      setServerMessage(error instanceof Error ? error.message : 'Failed to send message');
+    } finally {
+      setSubmitting(false);
     }
-
-    setSubmitStatus('success');
-    setServerMessage(data.message);
-    setFormData({ name: '', email: '', message: '', subject: '', company: '' });
-    
-  } catch (error) {
-    setSubmitStatus('error');
-    setServerMessage(error instanceof Error ? error.message : 'Failed to send message');
-  } finally {
-    setSubmitting(false);
-  }
-};
-
-  // Type guard for error handling
-  const isApiError = (error: unknown): error is ApiError => {
-    return typeof error === 'object' && error !== null && 'message' in error;
   };
 
   // Input change handler with proper typing
