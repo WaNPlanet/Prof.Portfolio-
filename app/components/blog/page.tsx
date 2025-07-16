@@ -1,335 +1,191 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Navbar from "../navbar/page";
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiClock, FiCalendar } from 'react-icons/fi';
+import { useState } from 'react';
 import Link from "next/link";
-import Modal from 'react-modal';
+import { blogPosts } from '../../lib/blogData';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  hoverImage: string;
-  link: string;
-  category: 'frontend' | 'cad' | 'arduino' | 'fullstack';
-  extraImages?: string[];
-}
+const BlogPage = () => {
+  const categories = ['All', 'Design', 'Development', 'Case Studies'];
+  const [activeCategory, setActiveCategory] = useState('All');
 
-export default function ProjectsPage() {
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [activeMedia, setActiveMedia] = useState<string | null>(null);
-  const [isModalAppElementSet, setIsModalAppElementSet] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      Modal.setAppElement(document.body);
-      setIsModalAppElementSet(true);
-    }
-  }, []);
-
-  const projects: Project[] = [
-    {
-      id: 1,
-      title: 'E-commerce Platform',
-      description: 'A modern online shopping experience with seamless checkout and product discovery',
-      image: '/projects/art.png',
-      hoverImage: '/projects/ecommerce-hover.png',
-      link: 'https://wanplanet.github.io/art-shop/',
-      category: 'frontend'
-    },
-    {
-      id: 2,
-      title: 'Energy Website',
-      description: 'Elegant showcase for creative professionals and agencies',
-      image: '/projects/energy.png',
-      hoverImage: '/projects/portfolio-hover.png',
-      link: 'https://energy-six.vercel.app/',
-      category: 'frontend'
-    },
-    {
-      id: 3,
-      title: 'Mobile App',
-      description: 'Cross-platform application for iOS and Android with native performance',
-      image: '/projects/planetSpeaks.png',
-      hoverImage: '/projects/mobile-hover.png',
-      link: 'https://main-site-murex-psi.vercel.app/',
-      category: 'frontend'
-    },
-    {
-      id: 4,
-      title: 'Thy Homes',
-      description: 'Cross-platform application for iOS and Android for real estate',
-      image: '/projects/homes.webp',
-      hoverImage: '/projects/homes-hover.webp',
-      link: 'https://wanplanet.github.io/ThyHomes/',
-      category: 'frontend'
-    },
-    {
-      id: 5,
-      title: 'CAD Design',
-      description: 'Precision engineering design for mechanical components',
-      image: '/projects/Arduino.jpg',
-      hoverImage: '/projects/Arduino-Hover.mp4',
-      extraImages: ['/projects/Arduino.jpg', '/projects/Arduino-Detail.jpg'],
-      link: '#',
-      category: 'arduino'
-    },
-    {
-      id: 6,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
-      image: '/projects/3d-Printer.jpg',
-      hoverImage: '/projects/3d-Printer-Hover.jpg',
-      extraImages: ['/projects/3d-Printer.jpg', '/projects/3d-Printer-View2.jpg'],
-      link: '#',
-      category: 'cad'
-    },
-    {
-      id: 7,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
-      image: '/projects/Sofa.png',
-      hoverImage: '/projects/Sofa-Hover.png',
-      extraImages: ['/projects/Sofa.png', '/projects/Sofa-Detail.png'],
-      link: '#',
-      category: 'cad'
-    }
-  ];
-
-  const categories = [
-    { id: 'all', name: 'All Projects' },
-    { id: 'frontend', name: 'Frontend' },
-    { id: 'fullstack', name: 'Fullstack' },
-    { id: 'cad', name: 'CAD' },
-    { id: 'arduino', name: 'Arduino' }
-  ];
-
-  const filteredProjects = activeCategory === 'all'
-    ? projects
-    : projects.filter(project => project.category === activeCategory);
-
-  const openModal = (project: Project) => {
-    setSelectedProject(project);
-    setActiveMedia(project.hoverImage);
-    setModalIsOpen(true);
+  // Get featured post (first post)
+  const featuredPost = blogPosts[0] || {
+    title: "Featured Post",
+    excerpt: "Featured post excerpt",
+    date: new Date().toLocaleDateString(),
+    readTime: "5 min read",
+    image: "/default-blog.jpg",
+    slug: "featured-post"
   };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-    setSelectedProject(null);
-    setActiveMedia(null);
-  };
-
-  const handleProjectClick = (project: Project) => {
-    if (project.category === 'frontend' || project.category === 'fullstack') return;
-    openModal(project);
-  };
-
-  const renderProjectLink = (project: Project) => {
-    if (project.category === 'frontend' || project.category === 'fullstack') {
-      return (
-        <Link
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col h-full"
-          onMouseEnter={() => setHoveredProject(project.id)}
-          onMouseLeave={() => setHoveredProject(null)}
-        >
-          {renderProjectContent(project)}
-        </Link>
-      );
-    } else {
-      return (
-        <div
-          onClick={() => handleProjectClick(project)}
-          className="group relative overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-all duration-300 bg-white flex flex-col h-full cursor-pointer"
-          onMouseEnter={() => setHoveredProject(project.id)}
-          onMouseLeave={() => setHoveredProject(null)}
-        >
-          {renderProjectContent(project)}
-        </div>
-      );
-    }
-  };
-
-  const renderProjectContent = (project: Project) => (
-    <>
-      <div className="relative w-full h-48 md:h-64 aspect-video">
-        <Image
-          src={hoveredProject === project.id ? project.hoverImage : project.image}
-          alt={project.title}
-          fill
-          className="object-contain transition-all duration-300 bg-gray-100 p-2"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
-      </div>
-
-      <div className="p-5 flex-1 flex flex-col">
-        <h3 className="text-lg font-semibold mb-2 text-gray-800 group-hover:text-indigo-600 transition-colors">
-          {project.title}
-        </h3>
-        <p className="text-gray-600 text-sm mb-3 flex-1">{project.description}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-indigo-600 text-sm font-medium hover:text-indigo-800 transition-colors self-start">
-            {project.category === 'frontend' || project.category === 'fullstack' ? 'View details →' : 'View project →'}
-          </span>
-          <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600">
-            {project.category}
-          </span>
-        </div>
-      </div>
-    </>
-  );
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-6">
-          <h1 className="text-3xl md:text-5xl font-bold">PROJECTS</h1>
-          <div className="text-base md:text-lg text-gray-700">Explore our innovative solutions</div>
-        </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+        {/* Hero Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Insights</h1>
+          <p className="text-xl text-gray-600 max-w-2xl">
+            Perspectives on design, technology, and creating meaningful digital experiences
+          </p>
+        </motion.div>
 
-        <div className="mb-8 align-middle">
-          <div className="flex justify-center gap-2 md:gap-4">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`px-4 py-2 rounded-full text-sm md:text-base transition-all duration-200 ${
-                  activeCategory === category.id
-                    ? 'bg-black text-white shadow-md'
+        {/* Featured Post */}
+        <motion.div 
+          whileHover={{ y: -5 }}
+          className="mb-20 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="relative h-64 lg:h-full min-h-[400px]">
+              <Image
+                src={featuredPost.image as string}
+                alt={featuredPost.title}
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </div>
+            <div className="p-8 lg:p-12 flex flex-col justify-center">
+              <div className="flex items-center gap-4 mb-6">
+                <span className="px-3 py-1 bg-black text-white text-xs rounded-full">
+                  Featured
+                </span>
+                <span className="text-sm text-gray-500 uppercase tracking-wider">
+                  {categories[1]} {/* Using first category */}
+                </span>
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">{featuredPost.title}</h2>
+              <p className="text-lg text-gray-600 mb-6">{featuredPost.excerpt}</p>
+              <div className="flex flex-wrap gap-6 items-center">
+                <div className="flex items-center gap-2 text-gray-500">
+                  <FiCalendar className="text-sm" />
+                  <span className="text-sm">
+                    {new Date(featuredPost.date).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-500">
+                  <FiClock className="text-sm" />
+                  <span className="text-sm">5 min read</span>
+                </div>
+              </div>
+              <Link href={`/blog/${featuredPost.slug}`}>
+                <button className="mt-8 flex items-center gap-2 text-black font-medium group cursor-pointer">
+                  Read full article
+                  <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+                </button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Content Section */}
+        <div className="mb-12">
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2 mb-12 justify-center">
+            {categories.map(category => (
+              <motion.button
+                key={category}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm transition-all ${
+                  activeCategory === category 
+                    ? 'bg-black text-white shadow-md' 
                     : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
                 }`}
               >
-                {category.name}
-              </button>
+                {category}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Posts Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.slice(1).map(post => (
+              <motion.div 
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                whileHover={{ y: -8 }}
+                className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all"
+              >
+                <Link href={`/blog/${post.slug}`}>
+                  <div className="relative h-48 w-full">
+                    <Image
+                      src={featuredPost.image as string}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                   
+
+                  </div>
+                  <div className="p-6">
+                    <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full mb-4">
+                      {categories[1]} {/* Using first category */}
+                    </span>
+                    <h3 className="text-xl font-bold mb-3">{post.title}</h3>
+                    <p className="text-gray-600 mb-5">{post.excerpt}</p>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">
+                        {new Date(post.date).toLocaleDateString('en-US', { 
+                          year: 'numeric', 
+                          month: 'long', 
+                          day: 'numeric' 
+                        })}
+                      </span>
+                      <div className="flex items-center gap-1 text-black font-medium group cursor-pointer">
+                        Read
+                        <FiArrowRight className="transition-transform group-hover:translate-x-1 text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        {filteredProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <div key={project.id}>{renderProjectLink(project)}</div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No projects found in this category.</p>
-          </div>
-        )}
-      </div>
-
-      {isModalAppElementSet && selectedProject && (
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Project Modal"
-          className="modal"
-          overlayClassName="modal-overlay"
+        {/* Newsletter CTA */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="bg-black text-white rounded-2xl p-8 md:p-12 text-center"
         >
-          <div className="w-screen h-screen p-4 flex flex-col bg-white overflow-hidden">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">{selectedProject.title}</h2>
-              <button
-                onClick={closeModal}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="flex-grow overflow-hidden">
-              {activeMedia?.endsWith('.mp4') ? (
-                <video
-                  src={activeMedia}
-                  controls
-                  autoPlay
-                  loop
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <Image
-                  src={activeMedia || ''}
-                  alt={selectedProject.title}
-                  width={1200}
-                  height={800}
-                  className="w-full h-full object-contain"
-                />
-              )}
-            </div>
-
-            {selectedProject.extraImages && (
-              <div className="flex gap-4 mt-4 overflow-x-auto">
-                {selectedProject.extraImages.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="w-24 h-24 cursor-pointer border border-gray-300 hover:border-indigo-600 rounded overflow-hidden"
-                    onClick={() => setActiveMedia(img)}
-                  >
-                    <Image
-                      src={img}
-                      alt={`Extra view ${idx + 1}`}
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="pt-4">
-              <p className="text-gray-700 mb-4">{selectedProject.description}</p>
-              <div className="flex justify-end">
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+          <h3 className="text-2xl md:text-3xl font-bold mb-4">Stay Updated</h3>
+          <p className="text-gray-300 max-w-2xl mx-auto mb-6">
+            Subscribe to receive our latest articles and insights directly to your inbox
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input 
+              type="email" 
+              placeholder="Your email address" 
+              className="flex-1 px-4 py-3  text-white border border-white bg-transparent rounded-lg"
+            />
+            <button className="px-6 py-3 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition-all">
+              Subscribe
+            </button>
           </div>
-        </Modal>
-      )}
-
-      <style jsx global>{`
-        .modal {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: white;
-          padding: 0;
-          border: none;
-          outline: none;
-          overflow: hidden;
-          width: 100vw;
-          height: 100vh;
-          z-index: 1001;
-        }
-
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.75);
-          z-index: 1000;
-        }
-      `}</style>
+        </motion.div>
+      </div>
     </div>
   );
-}
+};
+
+export default BlogPage;
