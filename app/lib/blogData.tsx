@@ -1,7 +1,7 @@
 // lib/blogData.ts
 import { v4 as uuidv4 } from 'uuid';
 
-// Make sure to export the interface
+// Single interface definition (remove duplicate)
 export interface BlogPost {
   id: string;
   title: string;
@@ -12,6 +12,7 @@ export interface BlogPost {
   image?: string;
 }
 
+// Sample blog posts data
 export const blogPosts: BlogPost[] = [
   {
     id: uuidv4(),
@@ -33,7 +34,24 @@ export const blogPosts: BlogPost[] = [
   }
 ];
 
-// Helper function to find posts by slug
+// Get post by slug (synchronous version)
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return blogPosts.find(post => post.slug === slug);
+}
+
+// Async version for use in server components
+export async function getPostBySlugAsync(slug: string): Promise<BlogPost | undefined> {
+  return blogPosts.find(post => post.slug === slug);
+}
+
+// Get all posts (sorted by date)
+export function getAllPosts(): BlogPost[] {
+  return [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+// Get all post slugs for static generation
+export function getAllPostSlugs(): { slug: string }[] {
+  return blogPosts.map(post => ({
+    slug: post.slug
+  }));
 }

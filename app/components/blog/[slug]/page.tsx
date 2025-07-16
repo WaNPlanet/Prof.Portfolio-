@@ -1,19 +1,24 @@
-// app/blog/[slug]/page.tsx
 import { getPostBySlug } from '@/app/lib/blogData';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
+interface BlogPost {
+  slug: string;
+  title: string;
+  date: string;
+  content: string;
+  excerpt?: string;
+  image?: string;
 }
 
-// This is automatically a Server Component
-export default function BlogPostPage({ params }: PageProps) {
-  const post = getPostBySlug(params.slug);
+export default async function BlogPostPage({
+  params
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPostBySlug(params.slug);
   
   if (!post) {
-    return notFound();
+    notFound();
   }
 
   return (
@@ -29,9 +34,12 @@ export default function BlogPostPage({ params }: PageProps) {
   );
 }
 
-// Metadata generation (must be in Server Component)
-export async function generateMetadata({ params }: PageProps) {
-  const post = getPostBySlug(params.slug);
+export async function generateMetadata({
+  params
+}: {
+  params: { slug: string };
+}) {
+  const post = await getPostBySlug(params.slug);
   
   if (!post) {
     return {
@@ -48,10 +56,9 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-// Generate static paths at build time
-export async function generateStaticParams(): Promise<Array<PageProps['params']>> {
+export async function generateStaticParams() {
   const { blogPosts } = await import('@/app/lib/blogData');
-  return blogPosts.map(post => ({
+  return blogPosts.map((post: BlogPost) => ({
     slug: post.slug
   }));
 }

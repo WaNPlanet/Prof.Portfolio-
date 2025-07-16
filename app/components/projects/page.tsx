@@ -5,10 +5,6 @@ import Navbar from "../navbar/page";
 import Link from "next/link";
 import Modal from 'react-modal';
 
-if (typeof window !== 'undefined') {
-  Modal.setAppElement('#__next');
-}
-
 interface Project {
   id: number;
   title: string;
@@ -26,12 +22,12 @@ export default function ProjectsPage() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeMedia, setActiveMedia] = useState<string | null>(null);
-  const [modalReady, setModalReady] = useState(false);
+  const [isModalAppElementSet, setIsModalAppElementSet] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      Modal.setAppElement('#__next');
-      setModalReady(true);
+      Modal.setAppElement(document.body);
+      setIsModalAppElementSet(true);
     }
   }, []);
 
@@ -194,7 +190,7 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black">
       <Navbar />
-      <div id="__next" className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col justify-between w-full">
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-6">
           <h1 className="text-3xl md:text-5xl font-bold">PROJECTS</h1>
           <div className="text-base md:text-lg text-gray-700">Explore our innovative solutions</div>
@@ -231,7 +227,7 @@ export default function ProjectsPage() {
         )}
       </div>
 
-      {modalReady && selectedProject && (
+      {isModalAppElementSet && selectedProject && (
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
