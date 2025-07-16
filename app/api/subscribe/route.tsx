@@ -1,23 +1,17 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-interface EmailRequest {
-  email: string;
-}
-
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { email }: EmailRequest = await req.json();
+    const { email } = await request.json();
 
-    // Validate email
     if (!email || !email.includes('@')) {
       return NextResponse.json(
-        { message: 'Please provide a valid email address' },
+        { error: 'Please provide a valid email address' },
         { status: 400 }
       );
     }
 
-    // Create transporter with secure configuration
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -28,29 +22,26 @@ export async function POST(req: Request) {
       },
     });
 
-    // Verify connection configuration
-    await transporter.verify();
-
-    // Send email
     await transporter.sendMail({
-      from: `"Portfolio Subscription" <${process.env.SMTP_USER}>`,
+      from: `"Newsletter Subscription" <${process.env.SMTP_USER}>`,
       to: process.env.RECEIVE_TO_EMAIL,
-      subject: 'New Blog Subscriber',
+      subject: 'New Newsletter Subscriber',
       html: `
-        <h3>New Subscription</h3>
+        <h2>New Newsletter Subscription</h2>
         <p>Email: ${email}</p>
         <p>Time: ${new Date().toLocaleString()}</p>
       `,
     });
 
-    return NextResponse.json({ 
-      message: 'Subscription successful!' 
-    });
-
-  } catch (error: unknown) {
-    console.error('Email error:', error);
     return NextResponse.json(
-      { message: 'Failed to process subscription. Please try again later.' },
+      { message: 'Thank you for subscribing!' },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error('Subscription error:', error);
+    return NextResponse.json(
+      { error: 'Failed to process subscription. Please try again later.' },
       { status: 500 }
     );
   }

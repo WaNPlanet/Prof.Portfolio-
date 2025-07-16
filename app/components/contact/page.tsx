@@ -39,56 +39,36 @@ export default function ContactPage() {
   const [serverMessage, setServerMessage] = useState<string>('');
 
   // Form submission handler with proper typing
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setSubmitting(true);
 
-    // Client-side validation
-    if (!formData.email.includes('@')) {
-      setSubmitStatus('error');
-      setServerMessage('Please enter a valid email address');
-      return;
+  try {
+    const response = await fetch('/api/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send message');
     }
 
-    if (formData.message.trim().length < 10) {
-      setSubmitStatus('error');
-      setServerMessage('Message should be at least 10 characters');
-      return;
-    }
-
-    setSubmitting(true);
-    setSubmitStatus(null);
-    setServerMessage('');
-
-    try {
-      const response: Response = await fetch('/api/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data: ApiResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
-      }
-
-      setServerMessage(data.message);
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '', subject: '', company: '' });
-    } catch (error: unknown) {
-      setSubmitStatus('error');
-      if (isApiError(error)) {
-        setServerMessage(error.message || error.error || 'Failed to send message. Please try again later.');
-      } else {
-        setServerMessage('Failed to send message. Please try again later.');
-      }
-      console.error('Submission error:', error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    setSubmitStatus('success');
+    setServerMessage(data.message);
+    setFormData({ name: '', email: '', message: '', subject: '', company: '' });
+    
+  } catch (error) {
+    setSubmitStatus('error');
+    setServerMessage(error instanceof Error ? error.message : 'Failed to send message');
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   // Type guard for error handling
   const isApiError = (error: unknown): error is ApiError => {

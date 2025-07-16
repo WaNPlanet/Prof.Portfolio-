@@ -54,6 +54,35 @@ const BlogPage = () => {
   }
 };
 
+const handleSubscribe = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setStatus('loading');
+
+  try {
+    const response = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Subscription failed');
+    }
+
+    setStatus('success');
+    setMessage(data.message);
+    setEmail('');
+    
+  } catch (error) {
+    setStatus('error');
+    setMessage(error instanceof Error ? error.message : 'Subscription failed');
+  }
+};
+
   const featuredPost = blogPosts[0] || {
     title: "Featured Post",
     excerpt: "Featured post excerpt",
