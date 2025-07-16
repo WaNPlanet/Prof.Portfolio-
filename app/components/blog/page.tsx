@@ -16,43 +16,43 @@ const BlogPage = () => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  // Basic validation
+  if (!email || !email.includes('@')) {
+    setStatus('error');
+    setMessage('Please enter a valid email address');
+    return;
+  }
+
+  setStatus('loading');
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || 'Subscription failed');
+    }
+
+    setStatus('success');
+    setMessage(data.message || 'Thank you for subscribing!');
+    setEmail('');
     
-    // Basic validation
-    if (!email || !email.includes('@')) {
-      setStatus('error');
-      setMessage('Please enter a valid email address');
-      return;
-    }
-
-    setStatus('loading');
-
-    try {
-      const res = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || 'Subscription failed');
-      }
-
-      setStatus('success');
-      setMessage('Thank you for subscribing!');
-      setEmail('');
-      
-      // Reset message after 5 seconds
-      setTimeout(() => setMessage(''), 5000);
-    } catch (err) {
-      setStatus('error');
-      setMessage(err instanceof Error ? err.message : 'Failed to subscribe');
-    }
-  };
+    // Reset message after 5 seconds
+    setTimeout(() => setMessage(''), 5000);
+  } catch (err) {
+    setStatus('error');
+    setMessage(err instanceof Error ? err.message : 'Failed to subscribe');
+  }
+};
 
   const featuredPost = blogPosts[0] || {
     title: "Featured Post",

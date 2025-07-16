@@ -30,35 +30,39 @@ export default function ContactPage() {
 
   // Form submission handler with proper typing
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
+  e.preventDefault();
+  setSubmitting(true);
 
-    try {
-      const response = await fetch('/api/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const response = await fetch('/api/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
-      }
-
-      setSubmitStatus('success');
-      setServerMessage(data.message);
-      setFormData({ name: '', email: '', message: '', subject: '', company: '' });
-      
-    } catch (error) {
-      setSubmitStatus('error');
-      setServerMessage(error instanceof Error ? error.message : 'Failed to send message');
-    } finally {
-      setSubmitting(false);
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to send message');
     }
-  };
+
+    setSubmitStatus('success');
+    setServerMessage(data.message);
+    setFormData({ name: '', email: '', message: '', subject: '', company: '' });
+    
+  } catch (error) {
+    setSubmitStatus('error');
+    setServerMessage(
+      error instanceof Error 
+        ? error.message 
+        : 'Failed to send message. Please try again later.'
+    );
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   // Input change handler with proper typing
   const handleInputChange = (
