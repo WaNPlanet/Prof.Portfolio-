@@ -34,8 +34,8 @@ export default function ProjectsPage() {
   const projects: Project[] = [
     {
       id: 1,
-      title: 'E-commerce Platform',
-      description: 'A modern online shopping experience with seamless checkout and product discovery',
+      title: 'Art Shop Platform',
+      description: 'This platform showcases an eclectic collection of original artworks, prints, and handmade crafts, all presented in a visually stunning layout. Users can navigate through various categories, view artist profiles, and purchase unique pieces with ease.',
       image: '/projects/art.png',
       hoverImage: '/projects/ecommerce-hover.png',
       link: 'https://wanplanet.github.io/art-shop/',
@@ -44,7 +44,7 @@ export default function ProjectsPage() {
     {
       id: 2,
       title: 'Energy Website',
-      description: 'Elegant showcase for creative professionals and agencies',
+      description: 'An innovative front-end website dedicated to promoting sustainable energy solutions.',
       image: '/projects/energy.png',
       hoverImage: '/projects/portfolio-hover.png',
       link: 'https://energy-six.vercel.app/',
@@ -52,8 +52,8 @@ export default function ProjectsPage() {
     },
     {
       id: 3,
-      title: 'Mobile App',
-      description: 'Cross-platform application for iOS and Android with native performance',
+      title: 'Planet Speaks',
+      description: 'Discover the art of web development with WebDesign Pro, a cutting-edge front-end website that showcases the power of design and functionality. This platform emphasizes clean aesthetics, intuitive navigation, and responsive layouts, ensuring an optimal user experience across all devices.',
       image: '/projects/planetSpeaks.png',
       hoverImage: '/projects/mobile-hover.png',
       link: 'https://main-site-murex-psi.vercel.app/',
@@ -62,7 +62,7 @@ export default function ProjectsPage() {
     {
       id: 4,
       title: 'Thy Homes',
-      description: 'Cross-platform application for iOS and Android for real estate',
+      description: 'An elegantly designed front-end website that redefines real estate exploration. This platform combines stunning visuals with intuitive navigation, allowing users to effortlessly discover their dream homes.',
       image: '/projects/homes.webp',
       hoverImage: '/projects/homes-hover.webp',
       link: 'https://wanplanet.github.io/ThyHomes/',
@@ -70,31 +70,31 @@ export default function ProjectsPage() {
     },
     {
       id: 5,
-      title: 'CAD Design',
-      description: 'Precision engineering design for mechanical components',
+      title: 'Arduino Programming',
+      description: 'Expertly programmed using Arduino. This innovative project harnesses the power of microcontroller technology to provide precise and responsive control of motors, enabling a wide range of applications from robotics to DIY projects.',
       image: '/projects/Arduino.jpg',
       hoverImage: '/projects/Arduino-Hover.mp4',
-      extraImages: ['/projects/Arduino.jpg', '/projects/Arduino-Detail.jpg'],
+      extraImages: ['/projects/Arduino.jpg', '/projects/Arduino-3.png'],
       link: '#',
       category: 'arduino'
     },
     {
       id: 6,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
+      title: 'CAD Design',
+      description: 'Meticulously crafted in Onshape. This state-of-the-art machine combines cutting-edge technology with a sleek, modern design, making it an essential tool for makers, hobbyists, and professionals alike.',
       image: '/projects/3d-Printer.jpg',
       hoverImage: '/projects/3d-Printer-Hover.jpg',
-      extraImages: ['/projects/3d-Printer.jpg', '/projects/3d-Printer-View2.jpg'],
+      extraImages: ['/projects/3d-Printer.jpg', '/projects/3dPrinter-2.png'],
       link: '#',
       category: 'cad'
     },
     {
       id: 7,
-      title: 'CAM Simulation',
-      description: 'Manufacturing process simulation and optimization',
+      title: 'CAD Design',
+      description: 'Crafted in Fusion 360, this stunning piece features smooth, flowing lines that effortlessly enhance any living space. ',
       image: '/projects/Sofa.png',
       hoverImage: '/projects/Sofa-Hover.png',
-      extraImages: ['/projects/Sofa.png', '/projects/Sofa-Detail.png'],
+      extraImages: ['/projects/Sofa.png', '/projects/P19D.png'],
       link: '#',
       category: 'cad'
     }
@@ -196,24 +196,30 @@ export default function ProjectsPage() {
           <div className="text-base md:text-lg text-gray-700">Explore our innovative solutions</div>
         </div>
 
-        <div className="mb-8 align-middle">
-          <div className="flex justify-center gap-2 md:gap-4">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`px-4 py-2 rounded-full text-sm md:text-base transition-all duration-200 ${
-                  activeCategory === category.id
-                    ? 'bg-black text-white shadow-md'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
-                }`}
-              >
-                {category.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
+       <div className="mb-8">
+  <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
+    {categories.map((category) => (
+      <button
+        key={category.id}
+        onClick={() => setActiveCategory(category.id)}
+        className={`
+          px-3 py-1.5 md:px-4 md:py-2 
+          rounded-full 
+          text-xs sm:text-sm md:text-base 
+          transition-all duration-200
+          whitespace-nowrap
+          ${
+            activeCategory === category.id
+              ? 'bg-black text-white shadow-md'
+              : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+          }
+        `}
+      >
+        {category.name}
+      </button>
+    ))}
+  </div>
+</div>
         {filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
