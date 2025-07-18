@@ -42,9 +42,9 @@ export default function Navbar() {
         >
           About
         </button>
-        <Link href="/components/blog" className="hover:underline px-2 py-1">
+        {/* <Link href="/components/blog" className="hover:underline px-2 py-1">
           Blog
-        </Link>
+        </Link> */}
       </div>
 
       {/* Logo */}
@@ -78,13 +78,13 @@ export default function Navbar() {
             >
               About
             </button>
-            <Link 
+            {/* <Link 
               href="/components/blog" 
               className="hover:underline text-left px-2 py-1"
               onClick={() => setMenuOpen(false)}
             >
               Blog
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
