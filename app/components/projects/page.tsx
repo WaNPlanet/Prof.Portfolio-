@@ -34,6 +34,15 @@ export default function ProjectsPage() {
   const projects: Project[] = [
     {
       id: 1,
+      title: 'Portfolio Template',
+      description: 'This platform serves as a dynamic portfolio showcasing a diverse collection of original projects.',
+      image: '/projects/portfolio (1).png',
+      hoverImage: '/projects/portfolio (2).png',
+      link: 'https://wanplanet.github.io/Portfolio/',
+      category: 'frontend'
+    },
+    {
+      id: 2,
       title: 'Art Shop Platform',
       description: 'This platform showcases an eclectic collection of original artworks, prints, and handmade crafts, all presented in a visually stunning layout. Users can navigate through various categories, view artist profiles, and purchase unique pieces with ease.',
       image: '/projects/art.png',
@@ -42,7 +51,7 @@ export default function ProjectsPage() {
       category: 'frontend'
     },
     {
-      id: 2,
+      id: 3,
       title: 'Energy Website',
       description: 'An innovative front-end website dedicated to promoting sustainable energy solutions.',
       image: '/projects/energy.png',
@@ -51,7 +60,7 @@ export default function ProjectsPage() {
       category: 'frontend'
     },
     {
-      id: 3,
+      id: 4,
       title: 'Planet Speaks',
       description: 'Discover the art of web development with WebDesign Pro, a cutting-edge front-end website that showcases the power of design and functionality. This platform emphasizes clean aesthetics, intuitive navigation, and responsive layouts, ensuring an optimal user experience across all devices.',
       image: '/projects/planetSpeaks.png',
@@ -60,7 +69,7 @@ export default function ProjectsPage() {
       category: 'frontend'
     },
     {
-      id: 4,
+      id: 5,
       title: 'Thy Homes',
       description: 'An elegantly designed front-end website that redefines real estate exploration. This platform combines stunning visuals with intuitive navigation, allowing users to effortlessly discover their dream homes.',
       image: '/projects/homes.webp',
@@ -69,7 +78,7 @@ export default function ProjectsPage() {
       category: 'frontend'
     },
     {
-      id: 5,
+      id: 6,
       title: 'Arduino Programming',
       description: 'Expertly programmed using Arduino. This innovative project harnesses the power of microcontroller technology to provide precise and responsive control of motors, enabling a wide range of applications from robotics to DIY projects.',
       image: '/projects/Arduino.jpg',
@@ -79,7 +88,7 @@ export default function ProjectsPage() {
       category: 'arduino'
     },
     {
-      id: 6,
+      id: 7,
       title: 'CAD Design',
       description: 'Meticulously crafted in Onshape. This state-of-the-art machine combines cutting-edge technology with a sleek, modern design, making it an essential tool for makers, hobbyists, and professionals alike.',
       image: '/projects/3d-Printer.jpg',
@@ -89,7 +98,7 @@ export default function ProjectsPage() {
       category: 'cad'
     },
     {
-      id: 7,
+      id: 8,
       title: 'CAD Design',
       description: 'Crafted in Fusion 360, this stunning piece features smooth, flowing lines that effortlessly enhance any living space. ',
       image: '/projects/Sofa.png',

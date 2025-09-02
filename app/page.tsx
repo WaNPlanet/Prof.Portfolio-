@@ -12,9 +12,7 @@ export default function Home() {
         <Navbar />
         <HeroSection />
         <AboutPage />
-       
         <ClientsPage />
-        
         <ContactPage/>
       </div>
     </main>
