@@ -113,7 +113,7 @@ export default function ProjectsPage() {
       description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
       image: '/projects/T.F.png',
       hoverImage: '/projects/TFH.png',
-      extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
+      extraImages: ['/projects/FTp.png', '/projects/TFp1.png'],
       link: '#',
       category: 'UI'
     },
@@ -123,7 +123,7 @@ export default function ProjectsPage() {
       description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
       image: '/projects/SKA.png',
       hoverImage: '/projects/SKAH.png',
-      extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
+      extraImages: ['/projects/SKAp.png', '/projects/SKAp1.png'],
       link: '#',
       category: 'UI'
     }
