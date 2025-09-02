@@ -12,7 +12,7 @@ interface Project {
   image: string;
   hoverImage: string;
   link: string;
-  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'designs';
+  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'UI';
   extraImages?: string[];
 }
 
@@ -115,7 +115,7 @@ export default function ProjectsPage() {
       hoverImage: '/projects/TFH.png',
       extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
       link: '#',
-      category: 'designs'
+      category: 'UI'
     },
      {
       id: 10,
@@ -125,7 +125,7 @@ export default function ProjectsPage() {
       hoverImage: '/projects/SKAH.png',
       extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
       link: '#',
-      category: 'designs'
+      category: 'UI'
     }
   ];
 
@@ -135,7 +135,7 @@ export default function ProjectsPage() {
     { id: 'fullstack', name: 'Fullstack' },
     { id: 'cad', name: 'CAD' },
     { id: 'arduino', name: 'Arduino' },
-    { id: 'designs', name: 'Designs' }
+    { id: 'UI', name: 'UI' }
   ];
 
   const filteredProjects = activeCategory === 'all'
