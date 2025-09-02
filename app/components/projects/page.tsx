@@ -12,7 +12,7 @@ interface Project {
   image: string;
   hoverImage: string;
   link: string;
-  category: 'frontend' | 'cad' | 'arduino' | 'fullstack';
+  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'designs';
   extraImages?: string[];
 }
 
@@ -106,6 +106,26 @@ export default function ProjectsPage() {
       extraImages: ['/projects/Sofa.png', '/projects/P19D.png'],
       link: '#',
       category: 'cad'
+    },
+    {
+      id: 9,
+      title: 'UI',
+      description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
+      image: '/projects/T.F.png',
+      hoverImage: '/projects/TFH.png',
+      extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
+      link: '#',
+      category: 'designs'
+    },
+     {
+      id: 10,
+      title: 'UI',
+      description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
+      image: '/projects/SKA.png',
+      hoverImage: '/projects/SKAH.png',
+      extraImages: ['/projects/logo.png', '/projects/branding-guide.png'],
+      link: '#',
+      category: 'designs'
     }
   ];
 
@@ -114,7 +134,8 @@ export default function ProjectsPage() {
     { id: 'frontend', name: 'Frontend' },
     { id: 'fullstack', name: 'Fullstack' },
     { id: 'cad', name: 'CAD' },
-    { id: 'arduino', name: 'Arduino' }
+    { id: 'arduino', name: 'Arduino' },
+    { id: 'designs', name: 'Designs' }
   ];
 
   const filteredProjects = activeCategory === 'all'
