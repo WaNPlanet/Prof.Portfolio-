@@ -12,7 +12,7 @@ interface Project {
   image: string;
   hoverImage: string;
   link: string;
-  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'UI';
+  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'UI' | 'data-analytics';
   extraImages?: string[];
 }
 
@@ -126,7 +126,17 @@ export default function ProjectsPage() {
       extraImages: ['/projects/SKAp.png', '/projects/SKAp1.png'],
       link: '#',
       category: 'UI'
-    }
+    },
+     {
+    id: 11,
+    title: 'Data Analytics Project',
+    description: 'A comprehensive data analytics project showcasing insights and visualizations derived from complex datasets.',
+    image: '/projects/titanic_crosstab_heatmap.png', // Replace with your actual image path
+    hoverImage: '/projects/titanic_correlation_heatmap.png', // Replace with your actual hover image path
+    extraImages: ['/projects/titanic_analysis.png', '/projects/titanic_correlation_heatmap.png','/projects/titanic_crosstab_heatmap.png',], // Replace with your actual extra images
+    link: '#', // Set this to '#' to trigger the modal
+    category: 'data-analytics' // New category for data analytics
+  }
   ];
 
   const categories = [
@@ -135,7 +145,8 @@ export default function ProjectsPage() {
     { id: 'fullstack', name: 'Fullstack' },
     { id: 'cad', name: 'CAD' },
     { id: 'arduino', name: 'Arduino' },
-    { id: 'UI', name: 'UI' }
+    { id: 'UI', name: 'UI' },
+    { id: 'data-analytics', name: 'Data Analytics' } 
   ];
 
   const filteredProjects = activeCategory === 'all'
