@@ -12,7 +12,7 @@ interface Project {
   image: string;
   hoverImage: string;
   link: string;
-  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'UI' | 'data-analytics';
+  category: 'frontend' | 'cad' | 'arduino' | 'fullstack' | 'Graphics' | 'data-analytics';
   extraImages?: string[];
 }
 
@@ -109,23 +109,23 @@ export default function ProjectsPage() {
     },
     {
       id: 9,
-      title: 'UI',
+      title: 'Graphics',
       description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
       image: '/projects/T.F.png',
       hoverImage: '/projects/TFH.png',
       extraImages: ['/projects/FTp.png', '/projects/TFp1.png'],
       link: '#',
-      category: 'UI'
+      category: 'Graphics'
     },
      {
       id: 10,
-      title: 'UI',
+      title: 'Graphics',
       description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
       image: '/projects/SKA.png',
       hoverImage: '/projects/SKAH.png',
       extraImages: ['/projects/SKAp.png', '/projects/SKAp1.png'],
       link: '#',
-      category: 'UI'
+      category: 'Graphics'
     },
      {
     id: 11,
@@ -136,7 +136,28 @@ export default function ProjectsPage() {
     extraImages: ['/projects/titanic_analysis.png', '/projects/titanic_correlation_heatmap.png','/projects/titanic_crosstab_heatmap.png',], // Replace with your actual extra images
     link: '#', // Set this to '#' to trigger the modal
     category: 'data-analytics' // New category for data analytics
-  }
+  },
+  {
+      id: 12,
+      title: 'Graphics',
+      description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
+      image: '/projects/carousel.jpg',
+      hoverImage: '/projects/carousel1.jpg',
+      extraImages: ['/projects/carousel2.jpg', '/projects/carousel5.jpg','/projects/carousel6.jpg', ],
+      link: '#',
+      category: 'Graphics'
+    },
+      {
+      id: 13,
+      title: 'Graphics',
+      description: 'A professional logo and branding package crafted with Adobe Illustrator and Photoshop. This project emphasizes clean lines, bold typography, and versatile design suitable for modern businesses.',
+      image: '/projects/env.jpg',
+      hoverImage: '/projects/env.jpg',
+      extraImages: ['/projects/env.jpg' ],
+      link: '#',
+      category: 'Graphics'
+    }
+
   ];
 
   const categories = [
@@ -145,7 +166,7 @@ export default function ProjectsPage() {
     { id: 'fullstack', name: 'Fullstack' },
     { id: 'cad', name: 'CAD' },
     { id: 'arduino', name: 'Arduino' },
-    { id: 'UI', name: 'UI' },
+    { id: 'Graphics', name: 'Graphics' },
     { id: 'data-analytics', name: 'Data Analytics' } 
   ];
 
